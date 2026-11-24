@@ -1,0 +1,71 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ORGANIZER
+  ATTENDEE
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(ATTENDEE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizedEvents Event[]   @relation("OrganizerEvents")
+  bookings        Booking[] @relation("AttendeeBookings")
+}
+
+model Event {
+  id            String      @id @default(uuid())
+  title         String
+  description   String
+  location      String
+  startDate     DateTime
+  totalSeats    Int
+  availableSeats Int
+  status        EventStatus @default(DRAFT)
+  organizerId   String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  organizer User      @relation("OrganizerEvents", fields: [organizerId], references: [id])
+  bookings  Booking[]
+}
+
+model Booking {
+  id         String        @id @default(uuid())
+  quantity   Int
+  status     BookingStatus @default(CONFIRMED)
+  attendeeId String
+  eventId    String
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  attendee User  @relation("AttendeeBookings", fields: [attendeeId], references: [id])
+  event    Event @relation(fields: [eventId], references: [id])
+
+  @@index([attendeeId])
+  @@index([eventId])
+}
