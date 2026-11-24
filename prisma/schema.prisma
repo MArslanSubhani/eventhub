@@ -38,20 +38,23 @@ model User {
 }
 
 model Event {
-  id            String      @id @default(uuid())
-  title         String
-  description   String
-  location      String
-  startDate     DateTime
-  totalSeats    Int
+  id             String      @id @default(uuid())
+  title          String
+  description    String
+  location       String
+  startDate      DateTime
+  totalSeats     Int
   availableSeats Int
-  status        EventStatus @default(DRAFT)
-  organizerId   String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  status         EventStatus @default(DRAFT)
+  organizerId    String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
   organizer User      @relation("OrganizerEvents", fields: [organizerId], references: [id])
   bookings  Booking[]
+
+  @@index([organizerId])
+  @@index([status, startDate])
 }
 
 model Booking {
@@ -66,6 +69,6 @@ model Booking {
   attendee User  @relation("AttendeeBookings", fields: [attendeeId], references: [id])
   event    Event @relation(fields: [eventId], references: [id])
 
-  @@index([attendeeId])
-  @@index([eventId])
+  @@index([attendeeId, status])
+  @@index([eventId, status])
 }
