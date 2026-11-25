@@ -91,6 +91,19 @@ cancelEvent(
 getAllEvents(@Query()filters:EventFilterDto) {
   return this.eventsService.getAllEvents(filters);
 }
+// GET ORGANIZER'S OWN EVENTS WITH STATUS FILTER
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('ORGANIZER')
+@Get('my-events')
+getOrganizerEvents(
+  @Req() req: AuthenticatedRequest,
+  @Query() filters: EventFilterDto,
+) {
+  return this.eventsService.getOrganizerEvents(
+    req.user.id,
+    filters.status,
+  );
+}
 // GET SINGLE EVENT
 @Get(':id')
 getEventById(@Param('id') eventId: string) {

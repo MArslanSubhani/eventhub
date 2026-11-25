@@ -37,6 +37,11 @@ export class EventsService {
   organizerId: string,
   updateEventDto: UpdateEventDto,
 ) {
+    if (Object.keys(updateEventDto).length === 0) {
+       throw new BadRequestException(
+       'At least one field is required to update the event',
+       );
+    }
   const event = await this.prisma.event.findUnique({
     where: {
       id: eventId,
@@ -230,6 +235,26 @@ return {
     hasPreviousPage: page > 1,
   },
 }
+}
+// GET ORGANIZER'S OWN EVENTS WITH STATUS FILTER
+async getOrganizerEvents(
+  organizerId: string,
+  status?: EventFilterDto['status'],
+) {
+  const events = await this.prisma.event.findMany({
+    where: {
+      organizerId,
+      ...(status && { status }),
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  return {
+    count: events.length,
+    events,
+  };
 }
 // GET SINGLE EVENT
 async getEventById(eventId: string) {

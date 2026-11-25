@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsDateString } from 'class-validator';
+import { IsOptional, IsString, IsDateString,IsIn  } from 'class-validator';
 import { Type } from 'class-transformer';
 import { IsInt, Min } from 'class-validator';
 
@@ -26,4 +26,8 @@ page?: number = 1;
 @IsInt()
 @Min(1)
 limit?: number = 10;
+
+@IsOptional()
+@IsIn(['DRAFT', 'PUBLISHED', 'CANCELLED'])
+status?: 'DRAFT' | 'PUBLISHED' | 'CANCELLED';
 }
