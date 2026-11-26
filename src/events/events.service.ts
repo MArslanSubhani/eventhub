@@ -3,7 +3,6 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateEventDto } from './dto/create-event.dto.js';
 import {NotFoundException,ForbiddenException, BadRequestException} from '@nestjs/common';
 import { EventFilterDto } from './dto/event-filter.dto.js';
-
 import { UpdateEventDto } from './dto/update-event.dto.js';
 
 @Injectable()

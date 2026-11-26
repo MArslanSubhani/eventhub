@@ -1,17 +1,5 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-  Req,
-  Param,
-  Patch,
-  Get,
-  Query
-} from '@nestjs/common';
-
+import { Body, Controller, Post, UseGuards, Req, Param, Patch, Get, Query} from '@nestjs/common';
 import type { Request } from 'express';
-
 import { EventsService } from './events.service.js';
 import { CreateEventDto } from './dto/create-event.dto.js';
 import { UpdateEventDto } from './dto/update-event.dto.js';

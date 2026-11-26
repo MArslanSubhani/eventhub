@@ -4,7 +4,6 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto.js';
-import { subscribe } from 'diagnostics_channel';
 
 @Injectable()
 export class AuthService {
